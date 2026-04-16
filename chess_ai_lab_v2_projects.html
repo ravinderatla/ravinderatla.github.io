@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chess AI Lab v2 — Project Map</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a1a;background:#f9f8f5;padding:2rem 1rem}
+.shell{max-width:860px;margin:0 auto}
+.header{margin-bottom:2rem}
+.header h1{font-size:22px;font-weight:500;letter-spacing:-0.5px}
+.header p{font-size:14px;color:#666;margin-top:4px}
+.tabs{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:6px 14px;border-radius:8px;border:0.5px solid #ccc;font-size:13px;cursor:pointer;background:#fff;color:#555;transition:all 0.15s}
+.tab:hover{border-color:#999;color:#1a1a1a}
+.tab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.section{display:none}
+.section.visible{display:block}
+.project-card{background:#fff;border:0.5px solid #e0ddd5;border-radius:12px;padding:1.25rem;margin-bottom:1rem;transition:border-color 0.15s}
+.project-card:hover{border-color:#aaa}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.card-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.card-id{font-size:11px;font-weight:500;padding:3px 8px;border-radius:4px;letter-spacing:0.3px}
+.id-core{background:#E1F5EE;color:#0F6E56}
+.id-research{background:#E6F1FB;color:#185FA5}
+.id-new{background:#FAEEDA;color:#854F0B}
+.id-drop{background:#f1efe8;color:#5f5e5a;text-decoration:line-through}
+.card-title{font-size:15px;font-weight:500}
+.badges{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+.badge{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;white-space:nowrap}
+.b-high{background:#FCEBEB;color:#A32D2D}
+.b-med{background:#FAEEDA;color:#854F0B}
+.b-low{background:#f1efe8;color:#5f5e5a}
+.b-pub{background:#EEEDFE;color:#3C3489}
+.b-mono{background:#EAF3DE;color:#3B6D11}
+.b-data{background:#E6F1FB;color:#185FA5}
+.b-csslab{background:#FBEAF0;color:#993556}
+.card-desc{font-size:13px;color:#555;line-height:1.6;margin-bottom:12px}
+.card-section-label{font-size:11px;font-weight:500;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.card-row{margin-bottom:10px}
+.card-detail{font-size:13px;color:#1a1a1a;line-height:1.6}
+.divider{height:0.5px;background:#e8e5dd;margin:10px 0}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:11px;padding:2px 8px;border-radius:4px;border:0.5px solid #ddd;color:#666;background:#fafaf8}
+.vs-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.vs-box{background:#f5f4f0;border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5;color:#444}
+.vs-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px}
+.old-label{color:#888}
+.new-label{color:#0F6E56}
+.mono-block{background:#f5f4f0;border-radius:8px;padding:10px;font-size:12px;line-height:1.7;color:#555;margin-top:6px}
+.mono-block b{color:#1a1a1a;font-weight:500}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:grid;grid-template-columns:90px 1fr;gap:16px;padding:16px 0;border-bottom:0.5px solid #e8e5dd}
+.tl-item:last-child{border-bottom:none}
+.tl-time{font-size:12px;color:#999;padding-top:2px;line-height:1.5}
+.tl-content h3{font-size:14px;font-weight:500;margin-bottom:4px}
+.tl-content p{font-size:13px;color:#555;line-height:1.6}
+.tl-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.mono-path{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:1rem}
+.mono-card{border:0.5px solid #e0ddd5;border-radius:12px;padding:1rem;background:#fff}
+.mono-card h3{font-size:13px;font-weight:500;margin-bottom:6px}
+.mono-card p{font-size:12px;color:#555;line-height:1.5}
+.mono-card .timeline-pill{font-size:11px;padding:2px 8px;border-radius:4px;margin-top:8px;display:inline-block}
+.pill-6{background:#EAF3DE;color:#3B6D11}
+.pill-12{background:#FAEEDA;color:#854F0B}
+.pill-18{background:#FAECE7;color:#993C1D}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem}
+.sum-card{background:#f5f4f0;border-radius:8px;padding:1rem;text-align:center}
+.sum-num{font-size:24px;font-weight:500;margin-bottom:2px}
+.sum-label{font-size:11px;color:#888}
+.asset-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.asset-box{background:#f5f4f0;border-radius:8px;padding:8px 10px}
+.asset-box .asset-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px}
+.asset-box p{font-size:12px;color:#555;line-height:1.5}
+.concepts-block{margin-top:12px;padding-top:10px;border-top:0.5px solid #e8e5dd}
+.concepts-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:8px}
+.concept-group{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:6px}
+.concept-cat{font-size:10px;font-weight:500;min-width:100px;color:#aaa;letter-spacing:0.3px}
+.ctag{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;white-space:nowrap}
+.ct-rl{background:#EEEDFE;color:#3C3489}
+.ct-ml{background:#E1F5EE;color:#0F6E56}
+.ct-genai{background:#E6F1FB;color:#185FA5}
+.ct-rag{background:#dbeeff;color:#0a4a8a}
+.ct-agent{background:#fff0db;color:#7a4500}
+.ct-data{background:#f1efe8;color:#5f5e5a}
+.ct-stat{background:#FBEAF0;color:#993556}
+.ct-llm{background:#fce8ff;color:#6b0099}
+.ct-embed{background:#e8fff0;color:#006b33}
+.expand-btn{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:12px;color:#888;cursor:pointer;border:0.5px solid #e0ddd5;border-radius:6px;padding:4px 10px;background:#fafaf8;transition:all 0.15s;user-select:none}
+.expand-btn:hover{border-color:#aaa;color:#444;background:#f5f4f0}
+.expand-btn .arrow{font-size:10px;transition:transform 0.2s}
+.expand-btn.open .arrow{transform:rotate(180deg)}
+.expandable{display:none;margin-top:12px;padding-top:12px;border-top:0.5px solid #e8e5dd}
+.expandable.open{display:block}
+.abstract-block{background:#f5f4f0;border-radius:8px;padding:12px;font-size:13px;line-height:1.7;color:#444;margin-bottom:12px;font-style:italic;border-left:2px solid #d0ccc5}
+.rq-list{list-style:none;margin-bottom:12px}
+.rq-list li{font-size:13px;color:#1a1a1a;line-height:1.6;padding:6px 0 6px 20px;border-bottom:0.5px solid #f0ede6;position:relative}
+.rq-list li:last-child{border-bottom:none}
+.rq-list li::before{content:"RQ";position:absolute;left:0;font-size:9px;font-weight:500;color:#aaa;top:8px;letter-spacing:0.3px}
+.task-list{list-style:none}
+.task-list li{font-size:12px;color:#555;line-height:1.5;padding:5px 0 5px 22px;border-bottom:0.5px solid #f0ede6;position:relative}
+.task-list li:last-child{border-bottom:none}
+.task-list li::before{content:"";position:absolute;left:4px;top:10px;width:8px;height:8px;border-radius:2px;border:0.5px solid #ccc;background:#fff}
+.task-done::before{background:#0F6E56 !important;border-color:#0F6E56 !important}
+@media(max-width:600px){
+  .vs-row{grid-template-columns:1fr}
+  .asset-row{grid-template-columns:1fr}
+  .tl-item{grid-template-columns:1fr;gap:4px}
+  .tl-time{font-size:11px;color:#aaa}
+  .card-header{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<div class="header">
+  <h1>Chess AI Lab — v2 updated project map</h1>
+  <p>Rebuilt from original C1–C8, CSSLab/Maia research, GM data layer, and monetization lens · April 2026</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="show('overview',this)">Overview</div>
+  <div class="tab" onclick="show('core',this)">Core projects</div>
+  <div class="tab" onclick="show('research',this)">Research tier</div>
+  <div class="tab" onclick="show('dropped',this)">Dropped</div>
+  <div class="tab" onclick="show('timeline',this)">Build order</div>
+  <div class="tab" onclick="show('money',this)">Monetization</div>
+</div>
+
+<!-- OVERVIEW -->
+<div id="overview" class="section visible">
+  <div class="summary-grid">
+    <div class="sum-card"><div class="sum-num">5</div><div class="sum-label">Core projects</div></div>
+    <div class="sum-card"><div class="sum-num">3</div><div class="sum-label">Research tier</div></div>
+    <div class="sum-card"><div class="sum-num">2</div><div class="sum-label">Dropped</div></div>
+    <div class="sum-card"><div class="sum-num">3</div><div class="sum-label">Data layers</div></div>
+  </div>
+  <div class="card-row">
+    <div class="card-section-label">What changed and why</div>
+    <div class="mono-block">
+      <b>Kept and reframed:</b> C1 (Style DNA), C2 (RL Coach), C3 (Openings), C4 (Opponent), C8 (Clock). All now have GM data as a comparison layer, not just personal games.<br><br>
+      <b>Upgraded to research tier:</b> C7 becomes the Rating Band Atlas — genuinely publishable, addresses an open gap in CSSLab's Maia-2 work.<br><br>
+      <b>Two new projects:</b> Behavioral Fingerprint Contribution (feeds the fair-play research community) and Style-Matched GM Curriculum (the coaching product).<br><br>
+      <b>Dropped:</b> C5 Chess Vision (solved problem), I4 AWS Serverless (unnecessary complexity given Mac Mini + Hetzner setup).<br><br>
+      <b>Core principle shift:</b> GM data stops being a separate module (C7) and becomes the comparison backbone that makes every personal project meaningful.
+    </div>
+  </div>
+  <div class="card-row" style="margin-top:1.5rem">
+    <div class="card-section-label">AI / ML concept tag legend</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+      <span class="ctag ct-ml">ML fundamentals</span>
+      <span class="ctag ct-rl">Reinforcement learning</span>
+      <span class="ctag ct-rag">Gen AI — RAG</span>
+      <span class="ctag ct-agent">Gen AI — Agents</span>
+      <span class="ctag ct-llm">Gen AI — LLM / fine-tuning</span>
+      <span class="ctag ct-embed">Embeddings</span>
+      <span class="ctag ct-stat">Statistical / research methods</span>
+      <span class="ctag ct-data">Data engineering</span>
+    </div>
+  </div>
+
+  <div class="card-row" style="margin-top:1.5rem">
+    <div class="card-section-label">The three data layers</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:6px">
+      <div class="asset-box"><div class="asset-label">Personal</div><p>10K chess.com games. Your behavioral fingerprint. Longitudinal time-series. Nobody else has this about you.</p></div>
+      <div class="asset-box"><div class="asset-label">Rating-band peers</div><p>Lichess games filtered to your Elo ±200. What humans at your level actually play — not GM theory.</p></div>
+      <div class="asset-box"><div class="asset-label">GM corpus</div><p>4M+ Lichess elite games. Pattern library for positions you reach. Filtered to lines you actually play.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- CORE -->
+<div id="core" class="section">
+
+  <div class="project-card">
+    <div class="card-header">
+      <div class="card-title-row"><span class="card-id id-core">C1</span><span class="card-title">Behavioral fingerprint + drift tracker</span></div>
+      <div class="badges"><span class="badge b-high">High priority</span><span class="badge b-mono">Monetizable</span></div>
+    </div>
+    <div class="card-desc">Your move distribution is as unique as a fingerprint — CSSLab proved this. The upgraded C1 doesn't just build the fingerprint once; it tracks how it changes over time. Are you becoming more positional? Is your time-pressure behavior improving? Is your style converging toward or away from success patterns at your rating band?</div>
+    <div class="vs-row">
+      <div class="vs-box"><div class="vs-label old-label">Original framing</div>Compare your DNA against Magnus. One-time snapshot.</div>
+      <div class="vs-box"><div class="vs-label new-label">New framing</div>Longitudinal behavioral time-series. Monthly drift report. Alerts when your profile shifts significantly.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card-section-label">What you build</div>
+      <div class="card-detail">Feature pipeline extracting: move-type distribution per game phase, time allocation patterns per move, position-type preferences (tactical vs positional), deviation frequency from Maia predictions at your Elo. Stored monthly as behavioral snapshots in Postgres. Drift detection using PSI threshold same as C6.</div>
+    </div>
+    <div class="card-row">
+      <div class="card-section-label">GM data role</div>
+      <div class="card-detail">Compare your fingerprint against Lichess players in your rating band ±200 who improved by 200+ Elo in 12 months. What did their behavioral profiles look like before the jump? That's your actual target signal.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="tag-row"><span class="tag">python-chess</span><span class="tag">Postgres</span><span class="tag">Maia features</span><span class="tag">Evidently AI</span><span class="tag">PSI drift</span></div>
+    <div class="concepts-block">
+      <div class="concepts-label">AI / ML concepts required</div>
+      <div class="concept-group"><span class="concept-cat">ML fundamentals</span><span class="ctag ct-ml">Feature engineering</span><span class="ctag ct-ml">Behavioural stylometry</span><span class="ctag ct-ml">Time-series analysis</span><span class="ctag ct-ml">Dimensionality reduction</span></div>
+      <div class="concept-group"><span class="concept-cat">Statistical</span><span class="ctag ct-stat">Distribution drift (PSI)</span><span class="ctag ct-stat">Cosine similarity</span><span class="ctag ct-stat">Population stability index</span></div>
+      <div class="concept-group"><span class="concept-cat">Data engineering</span><span class="ctag ct-data">PGN parsing</span><span class="ctag ct-data">Longitudinal data modelling</span><span class="ctag ct-data">Snapshot storage</span></div>
+    </div>
+    <div class="expand-btn" onclick="toggle(this)"><span>Abstract, research questions &amp; tasks</span><span class="arrow">▼</span></div>
+    <div class="expandable">
+      <div class="card-section-label" style="margin-bottom:6px">Abstract</div>
+      <div class="abstract-block">Individual chess players exhibit stable, measurable behavioural signatures across their games — patterns of move timing, position-type preference, and decision-making style that persist over time and are distinct enough to identify a player. This project constructs a longitudinal behavioural fingerprint from 10,000 personal chess games, tracks its evolution month-by-month, and compares it against the profiles of players in the same rating band who achieved significant rating improvement. The central hypothesis is that meaningful skill improvement is preceded by measurable behavioural shift, and that those shifts can be identified and targeted in advance.</div>
+      <div class="card-section-label" style="margin-bottom:6px">Research questions</div>
+      <ul class="rq-list">
+        <li>Do individual chess players exhibit stable, consistent behavioural fingerprints across time controls and game phases, and how stable are these fingerprints over 6–12 month periods?</li>
+        <li>Which specific behavioural features — time allocation, move-type distribution, positional preference — show the strongest predictive signal for upcoming rating improvement?</li>
+        <li>Is there a measurable behavioural precursor to rating stagnation (plateau), and can it be detected before the plateau becomes apparent in Elo alone?</li>
+        <li>How does a player's behavioural fingerprint diverge from their rating-band peers during periods of rapid improvement vs stagnation?</li>
+      </ul>
+      <div class="card-section-label" style="margin-bottom:6px">Tasks</div>
+      <ul class="task-list">
+        <li>Parse all 10K PGN games and extract per-move features: think time, eval delta, game phase, position type (tactical/positional/endgame), ECO code</li>
+        <li>Implement Maia move-match probability scoring at your Elo band for each game</li>
+        <li>Build monthly snapshot aggregation pipeline — store feature distributions per 30-day window in Postgres</li>
+        <li>Implement PSI drift detection: alert when any feature distribution shifts beyond threshold vs prior 3-month baseline</li>
+        <li>Pull Lichess DB cohort: players within ±200 Elo who gained 200+ Elo in 12 months — extract their pre-improvement fingerprints</li>
+        <li>Build cosine similarity scorer: compare your monthly snapshots against the improvement-cohort profiles</li>
+        <li>Build visualisation dashboard: fingerprint radar chart + drift timeline + cohort comparison overlay</li>
+        <li>Write monthly auto-report: plain-language summary of what changed in your profile this month</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="card-header">
+      <div class="card-title-row"><span class="card-id id-core">C2</span><span class="card-title">Mistake pattern coach with GM context</span></div>
+      <div class="badges"><span class="badge b-high">High priority</span><span class="badge b-mono">Monetizable</span><span class="badge b-csslab">CSSLab adjacent</span></div>
+    </div>
+    <div class="card-desc">Your blunder classifier already finds your problem positions. The upgrade: when it surfaces a weakness pattern, it doesn't show you the engine line. It shows you how players 200–400 Elo above you — who actually reach the same positions from the same openings you play — handle it.</div>
+    <div class="vs-row">
+      <div class="vs-box"><div class="vs-label old-label">Original output</div>"You blunder in IQP positions under time pressure. Here's Stockfish's best move."</div>
+      <div class="vs-box"><div class="vs-label new-label">New output</div>"Here's how 1800-rated players who play your exact Sicilian line handle this structure — and what they do differently in the 5 moves before the critical moment."</div>
+    </div>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card-section-label">The key pipeline addition</div>
+      <div class="card-detail">After blunder classification, query Lichess GM DB filtered by: same opening line (ECO code), same position type, player Elo 1800–2200, games from last 3 years. Extract 10 moves around the critical moment. Feed to Claude for natural language pattern extraction in terms of principles, not engine lines.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="tag-row"><span class="tag">XGBoost</span><span class="tag">Lichess DB</span><span class="tag">Stockfish eval</span><span class="tag">Claude API</span><span class="tag">PivotRL</span><span class="tag">PAHF</span></div>
+    <div class="concepts-block">
+      <div class="concepts-label">AI / ML concepts required</div>
+      <div class="concept-group"><span class="concept-cat">ML fundamentals</span><span class="ctag ct-ml">Supervised classification</span><span class="ctag ct-ml">Gradient boosting (XGBoost)</span><span class="ctag ct-ml">Anomaly detection</span><span class="ctag ct-ml">Class imbalance handling</span></div>
+      <div class="concept-group"><span class="concept-cat">Reinforcement learning</span><span class="ctag ct-rl">Reward shaping</span><span class="ctag ct-rl">Policy optimisation</span><span class="ctag ct-rl">Curriculum learning</span><span class="ctag ct-rl">Adaptive difficulty (PivotRL)</span></div>
+      <div class="concept-group"><span class="concept-cat">Gen AI — LLM</span><span class="ctag ct-llm">Structured prompting</span><span class="ctag ct-llm">Chain-of-thought</span><span class="ctag ct-llm">Personalised feedback (PAHF)</span></div>
+      <div class="concept-group"><span class="concept-cat">Data engineering</span><span class="ctag ct-data">Eval batch pipelines</span><span class="ctag ct-data">Position tagging</span><span class="ctag ct-data">Game phase segmentation</span></div>
+    </div>
+    <div class="expand-btn" onclick="toggle(this)"><span>Abstract, research questions &amp; tasks</span><span class="arrow">▼</span></div>
+    <div class="expandable">
+      <div class="card-section-label" style="margin-bottom:6px">Abstract</div>
+      <div class="abstract-block">Chess improvement tools overwhelmingly focus on what the engine would have played, not on what a human at a slightly higher skill level actually plays in the same situation. This project builds a personalised mistake classifier trained on one player's 10,000-game error history, tagged by position type, game phase, opponent rating, and time pressure. When a recurring weakness is detected, the system retrieves real games from Lichess played by humans 200–400 Elo higher in the identical structural context — then uses an LLM to extract the principled differences in their approach, not just the engine's top move. The output is human-readable coaching grounded in realistic human behaviour, not superhuman engine perfection.</div>
+      <div class="card-section-label" style="margin-bottom:6px">Research questions</div>
+      <ul class="rq-list">
+        <li>Can a personal blunder classifier trained on one player's error history outperform generic centipawn-loss thresholds for predicting future mistakes in similar positions?</li>
+        <li>Do players at Elo +200–400 exhibit consistently different move-selection behaviour in positions where lower-rated players frequently err, and can those differences be extracted as transferable principles?</li>
+        <li>Does RL-driven adaptive puzzle selection based on personal mistake patterns produce measurable rating improvement over random or engine-curated puzzle selection within 30 days?</li>
+        <li>How much does time-pressure context (clock &lt;30s) improve blunder prediction accuracy beyond position-type features alone?</li>
+      </ul>
+      <div class="card-section-label" style="margin-bottom:6px">Tasks</div>
+      <ul class="task-list">
+        <li>Build mistake dataset from 10K games: tag every eval drop &gt;0.5 pawns with position type, game phase, time remaining, opponent Elo, ECO code</li>
+        <li>Train XGBoost blunder-risk classifier — features: position type, phase, clock time, eval trend, move number, opponent rating delta</li>
+        <li>Evaluate classifier: compare against CPL baseline — measure precision/recall on held-out games</li>
+        <li>Build Lichess GM query layer: given a position type + ECO code, retrieve 20 games from players Elo 1800–2200 containing that structure</li>
+        <li>Build Claude annotation pipeline: extract the 10 moves around the critical moment, prompt for principle-based explanation (not engine lines)</li>
+        <li>Implement PivotRL puzzle selector: surface puzzles from your highest-risk position categories, track solve rate over 30 days</li>
+        <li>Implement ParamMem diversity check: store last 10 feedback outputs per mistake category, inject as negative examples to prevent repetitive advice</li>
+        <li>Build 30-day improvement tracker: measure blunder rate per position type week-over-week, plot against puzzle exposure</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="card-header">
+      <div class="card-title-row"><span class="card-id id-core">C3</span><span class="card-title">Personalised repertoire builder</span></div>
+      <div class="badges"><span class="badge b-high">High priority</span><span class="badge b-mono">Monetizable</span></div>
+    </div>
+    <div class="card-desc">Not "you deviated from theory at move 8." The real insight: what do players at your exact rating band actually play in the positions you reach? Opening recommendations based on what wins at your level, filtered by your behavioral style from C1 — avoiding lines that reach your C2 problem positions.</div>
+    <div class="vs-row">
+      <div class="vs-box"><div class="vs-label old-label">Original framing</div>Detect where you deviate from GM theory. Flag bad deviations.</div>
+      <div class="vs-box"><div class="vs-label new-label">New framing</div>Build a repertoire from what actually works at your Elo, matched to your style profile. Avoid lines leading to your weak position types.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card-section-label">Style-aware filtering (the key innovation)</div>
+      <div class="card-detail">Take your C1 fingerprint — specifically your positional vs tactical preference score and endgame win rate. Filter opening recommendations to avoid lines that statistically lead to position types where you underperform. A tactical player who loses every Carlsbad endgame should not be recommended the Exchange Slav.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="tag-row"><span class="tag">Lichess opening DB</span><span class="tag">ECO classifier</span><span class="tag">Qdrant</span><span class="tag">C1 fingerprint</span><span class="tag">Doc-to-LoRA</span></div>
+    <div class="concepts-block">
+      <div class="concepts-label">AI / ML concepts required</div>
+      <div class="concept-group"><span class="concept-cat">Gen AI — RAG</span><span class="ctag ct-rag">Hybrid search (BM25 + dense)</span><span class="ctag ct-rag">Vector embeddings</span><span class="ctag ct-rag">Retrieval-augmented generation</span><span class="ctag ct-rag">Reranking</span></div>
+      <div class="concept-group"><span class="concept-cat">Gen AI — fine-tuning</span><span class="ctag ct-llm">LoRA / QLoRA</span><span class="ctag ct-llm">Doc-to-LoRA compression</span><span class="ctag ct-llm">Domain adaptation</span></div>
+      <div class="concept-group"><span class="concept-cat">ML fundamentals</span><span class="ctag ct-ml">Multi-label classification (ECO)</span><span class="ctag ct-ml">Style-conditioned filtering</span><span class="ctag ct-ml">Recommendation systems</span></div>
+      <div class="concept-group"><span class="concept-cat">Embeddings</span><span class="ctag ct-embed">Position embeddings (FEN)</span><span class="ctag ct-embed">nomic-embed-text</span></div>
+    </div>
+    <div class="expand-btn" onclick="toggle(this)"><span>Abstract, research questions &amp; tasks</span><span class="arrow">▼</span></div>
+    <div class="expandable">
+      <div class="card-section-label" style="margin-bottom:6px">Abstract</div>
+      <div class="abstract-block">Opening preparation tools universally teach GM mainlines, which are often irrelevant or counterproductive below 1800 Elo — positions that theory considers equal are won and lost asymmetrically at club level depending on the specific imbalances they create. This project builds a personalised opening repertoire grounded in two filters: what actually succeeds statistically at the player's specific rating band, and which lines align with the player's behavioural fingerprint from C1. Lines that lead to position types where the player consistently underperforms are deprioritised regardless of their theoretical evaluation, while lines that reach structurally favourable ground for that player's style are surfaced and annotated.</div>
+      <div class="card-section-label" style="margin-bottom:6px">Research questions</div>
+      <ul class="rq-list">
+        <li>Do opening lines that are theoretically sound (engine-equal) show significantly different win rates across rating bands, and can those differences be modelled statistically from Lichess data?</li>
+        <li>Can a player's C1 behavioural fingerprint (positional vs tactical preference, endgame win rate) meaningfully predict which opening structures will yield better outcomes for that specific player?</li>
+        <li>Does style-aware opening filtering — excluding lines that lead to the player's weak position types — improve tournament results compared to theory-first recommendations?</li>
+        <li>How many games of personal history are required before the style-conditioned recommendation stabilises and stops changing significantly with new data?</li>
+      </ul>
+      <div class="card-section-label" style="margin-bottom:6px">Tasks</div>
+      <ul class="task-list">
+        <li>Build ECO classifier on personal game history — tag every game with opening family, variation depth, and deviation move number</li>
+        <li>Pull Lichess rating-band stats: for every ECO code you play, compute win/draw/loss rates at your Elo ±200 from the last 2 years</li>
+        <li>Index opening positions as FEN embeddings in Qdrant with BM25 + dense hybrid search</li>
+        <li>Implement style-conditioned filter: use C1 fingerprint to score each opening line by its expected position-type outcome vs your weak categories</li>
+        <li>Build repertoire recommendation engine: given your colour and opening choice, rank candidate variations by (rating-band win rate × style alignment score)</li>
+        <li>Compress GM opening library into Doc-to-LoRA adapter by opening family — enables cheap local inference for opening lookups</li>
+        <li>Build deviation alerter: flag games where you left your recommended repertoire and classify whether the deviation was beneficial or harmful via Stockfish</li>
+        <li>Write repertoire report: top 5 recommended lines per colour with rationale grounded in your style profile</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="card-header">
+      <div class="card-title-row"><span class="card-id id-core">C4</span><span class="card-title">Opponent profiling agent</span></div>
+      <div class="badges"><span class="badge b-med">Medium priority</span><span class="badge b-mono">Monetizable</span></div>
+    </div>
+    <div class="card-desc">Pre-game brief from opponent's public game history: openings, collapse patterns, time tendencies, Elo trajectory. The upgrade: cross-reference their weaknesses against your strengths from C1. Find matchup edges, not just their profile in isolation.</div>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card-section-label">New addition: matchup scoring</div>
+      <div class="card-detail">Your C1 fingerprint vs opponent's extracted profile → a matchup score per opening line. "Opponent struggles in endgames; your endgame win rate is 67% — steer toward these exchanges." This is what seconds do for elite players. Nobody has automated it for club players.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="tag-row"><span class="tag">chess.com API</span><span class="tag">C1 fingerprint</span><span class="tag">LangGraph</span><span class="tag">Claude API</span></div>
+    <div class="concepts-block">
+      <div class="concepts-label">AI / ML concepts required</div>
+      <div class="concept-group"><span class="concept-cat">Gen AI — Agents</span><span class="ctag ct-agent">Multi-agent orchestration</span><span class="ctag ct-agent">LangGraph state machines</span><span class="ctag ct-agent">Tool-calling agents</span><span class="ctag ct-agent">Agentic memory (MAPLE)</span></div>
+      <div class="concept-group"><span class="concept-cat">Gen AI — LLM</span><span class="ctag ct-llm">Structured output generation</span><span class="ctag ct-llm">Persona-conditioned prompting</span></div>
+      <div class="concept-group"><span class="concept-cat">ML fundamentals</span><span class="ctag ct-ml">Profiling / clustering</span><span class="ctag ct-ml">Similarity scoring</span><span class="ctag ct-ml">Behavioural pattern extraction</span></div>
+      <div class="concept-group"><span class="concept-cat">Data engineering</span><span class="ctag ct-data">API data ingestion</span><span class="ctag ct-data">PGN feature extraction</span></div>
+    </div>
+    <div class="expand-btn" onclick="toggle(this)"><span>Abstract, research questions &amp; tasks</span><span class="arrow">▼</span></div>
+    <div class="expandable">
+      <div class="card-section-label" style="margin-bottom:6px">Abstract</div>
+      <div class="abstract-block">Elite chess players routinely employ human seconds to prepare against specific opponents — analysing their opening tendencies, collapse patterns under time pressure, and psychological vulnerabilities. This preparation is unavailable to club players. This project automates opponent profiling by ingesting an opponent's public game history from chess.com, extracting behavioural features using the same pipeline as C1, and cross-referencing their weaknesses against the player's own strength profile. The output is a pre-game brief that surfaces concrete matchup edges: openings where the opponent struggles, time controls that expose their weaknesses, and structural imbalances that favour the player's own style.</div>
+      <div class="card-section-label" style="margin-bottom:6px">Research questions</div>
+      <ul class="rq-list">
+        <li>Can opponent behavioural profiles extracted from publicly available game histories reliably predict their weaknesses in specific structural or time-pressure scenarios?</li>
+        <li>Does cross-referencing opponent weaknesses against the player's own strength profile (matchup scoring) improve pre-game opening selection compared to theory-only preparation?</li>
+        <li>How many games of opponent history are required before the extracted profile stabilises and produces actionable, consistent recommendations?</li>
+        <li>Can opponent Elo trajectory (rising vs plateauing) serve as a reliable signal for their current psychological state and openness to pressure?</li>
+      </ul>
+      <div class="card-section-label" style="margin-bottom:6px">Tasks</div>
+      <ul class="task-list">
+        <li>Build opponent game fetcher: pull last 100 games from chess.com public API for any given username</li>
+        <li>Run C1 feature extraction pipeline on opponent's games — produce their behavioural fingerprint</li>
+        <li>Build collapse detector: identify time controls, game phases, and position types where opponent's accuracy drops most sharply</li>
+        <li>Build opening tendency extractor: most frequent ECO codes, deviation points, and win rates per opening family</li>
+        <li>Implement matchup scorer: cosine similarity between opponent weak features and your strong features from C1 — rank opening lines by matchup edge</li>
+        <li>Build LangGraph orchestrator: fetcher → profiler → matchup scorer → brief generator as a 4-node pipeline</li>
+        <li>Build brief generator: Claude produces a 1-page pre-game brief — opening recommendations, watch-outs, psychological tendencies — grounded in the data</li>
+        <li>Add MAPLE memory layer: store opponent profiles in Qdrant so repeated opponents are instant retrieval, not recomputed</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="card-header">
+      <div class="card-title-row"><span class="card-id id-core">C8</span><span class="card-title">Psychological clock agent</span></div>
+      <div class="badges"><span class="badge b-med">Medium priority</span><span class="badge b-data">Dataset contribution</span></div>
+    </div>
+    <div class="card-desc">Core unchanged — extract move timestamps, correlate think-time with eval drops, find your personal danger zone. Upgraded role: becomes your primary contribution to the fair-play research community. Your self-labeled time-pressure data is exactly what detection teams say they're missing.</div>
+    <div class="vs-row">
+      <div class="vs-box"><div class="vs-label old-label">Original role</div>Personal coaching tool. Find your clock danger zone.</div>
+      <div class="vs-box"><div class="vs-label new-label">New role</div>Personal tool + labeled behavioral dataset with granular self-labels: prep moves, calculation moves, time-pressure moves. CSSLab-compatible format.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="tag-row"><span class="tag">PGN timestamps</span><span class="tag">Stockfish eval</span><span class="tag">Behavioral labels</span><span class="tag">CSSLab format</span></div>
+    <div class="concepts-block">
+      <div class="concepts-label">AI / ML concepts required</div>
+      <div class="concept-group"><span class="concept-cat">ML fundamentals</span><span class="ctag ct-ml">Temporal pattern analysis</span><span class="ctag ct-ml">Correlation analysis</span><span class="ctag ct-ml">Behavioural labelling</span><span class="ctag ct-ml">Anomaly detection</span></div>
+      <div class="concept-group"><span class="concept-cat">Statistical</span><span class="ctag ct-stat">Time-series regression</span><span class="ctag ct-stat">Confidence intervals</span><span class="ctag ct-stat">Threshold-based alerting</span></div>
+      <div class="concept-group"><span class="concept-cat">Data engineering</span><span class="ctag ct-data">PGN timestamp extraction</span><span class="ctag ct-data">Move-level annotation</span><span class="ctag ct-data">Dataset schema design</span><span class="ctag ct-data">HuggingFace dataset release</span></div>
+    </div>
+    <div class="expand-btn" onclick="toggle(this)"><span>Abstract, research questions &amp; tasks</span><span class="arrow">▼</span></div>
+    <div class="expandable">
+      <div class="card-section-label" style="margin-bottom:6px">Abstract</div>
+      <div class="abstract-block">Chess move timestamps encode a rich psychological signal that is almost entirely unexploited by existing analysis tools. The time a player spends on a move — relative to their own baseline, the game phase, and the position's complexity — reveals their cognitive state: confident theory recall, deep calculation, intuitive judgment, or time-pressured panic. This project extracts per-move think-time from PGN clock data, correlates it with eval drops and game outcomes, and constructs a personal "danger zone" map: the specific combinations of time remaining, move number, and position type where this player's decision quality degrades most sharply. As a secondary output, the self-labeled dataset produced becomes a research contribution to the fair-play detection community.</div>
+      <div class="card-section-label" style="margin-bottom:6px">Research questions</div>
+      <ul class="rq-list">
+        <li>What is the functional relationship between think time (normalised to personal baseline) and move quality across different game phases and position types?</li>
+        <li>Can personal time-pressure thresholds — the clock value below which a specific player's accuracy degrades significantly — be reliably identified from historical game data?</li>
+        <li>Do post-blunder moves exhibit a statistically distinct temporal signature (think time, subsequent accuracy) that can be used to model emotional recovery patterns?</li>
+        <li>How distinguishable are the temporal signatures of different human move categories (theory recall, deep calculation, intuition, time pressure) from one another — and from engine-assisted moves?</li>
+      </ul>
+      <div class="card-section-label" style="margin-bottom:6px">Tasks</div>
+      <ul class="task-list">
+        <li>Extract clock timestamps from all 10K PGN games — compute per-move think time and remaining time</li>
+        <li>Build personal think-time baseline per game phase and move number — normalise all think times against this baseline</li>
+        <li>Correlate normalised think time against eval delta — plot think-time vs eval drop scatter across position types</li>
+        <li>Identify personal danger zone: threshold analysis to find the clock/move-number combinations where eval drops spike</li>
+        <li>Build move-category labeller: classify each move as prep (fast, early, theory), calculation (slow, mid-game), intuition (fast, mid-game), time-pressure (fast, low clock), or post-blunder</li>
+        <li>Validate labels: check Maia move-match probability distributions per category — expect prep and calculation to diverge significantly</li>
+        <li>Package dataset: 10K games × move-level features (think time, category label, eval, Maia score, phase, ECO) in Parquet format</li>
+        <li>Release on HuggingFace with dataset card describing schema, labelling methodology, and intended use for fair-play research</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- RESEARCH -->
+<div id="research" class="section">
+
+  <div class="project-card">
+    <div class="card-header">
+      <div class="card-title-row"><span class="card-id id-research">R1</span><span class="card-title">Rating band behavioral atlas</span></div>
+      <div class="badges"><span class="badge b-high">High priority</span><span class="badge b-pub">Publishable</span><span class="badge b-csslab">Extends Maia-2</span></div>
+    </div>
+    <div class="card-desc">Your strongest research contribution and the one that opens doors to CSSLab, KTH, and research hiring. Maia-2 (NeurIPS 2024) built a unified model of human chess behavior across skill levels but acknowledged it doesn't produce coherent improvement pathways. This project builds that missing map.</div>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card-section-label">What you build</div>
+      <div class="card-detail">Take the full Lichess DB. Segment by rating in 100-Elo bands. For each band extract: time allocation per game phase, move-type distribution, tactical vs positional preference, blunder frequency by position type, opening diversity, endgame conversion rate. Build a continuous behavioral map showing what specifically changes between each band — not "play better moves" but concrete behavioral shifts.</div>
+    </div>
+    <div class="card-row">
+      <div class="card-section-label">Why it's publishable</div>
+      <div class="card-detail">CSSLab explicitly said in the Maia-2 paper that coherent improvement pathways are the missing piece. You're building a data-driven answer to that gap using the same Lichess corpus they use. A workshop paper at KDD or CHI submission on human-AI learning in chess is realistic with solid results.</div>
+    </div>
+    <div class="card-row">
+      <div class="card-section-label">Personal data connection</div>
+      <div class="card-detail">Once the atlas exists, plot your own behavioral fingerprint against it. See exactly where you sit, which band's patterns you're closest to, and which specific behavioral shifts would move you to the next band. Your personal project and research contribution become the same pipeline.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="tag-row"><span class="tag">Lichess full DB</span><span class="tag">python-chess</span><span class="tag">Maia features</span><span class="tag">Postgres</span><span class="tag">NeurIPS/KDD target</span><span class="tag">CSSLab outreach</span></div>
+    <div class="concepts-block">
+      <div class="concepts-label">AI / ML concepts required</div>
+      <div class="concept-group"><span class="concept-cat">ML fundamentals</span><span class="ctag ct-ml">Large-scale feature extraction</span><span class="ctag ct-ml">Behavioural stylometry</span><span class="ctag ct-ml">Clustering (k-means / UMAP)</span><span class="ctag ct-ml">Longitudinal cohort analysis</span></div>
+      <div class="concept-group"><span class="concept-cat">Human-AI alignment</span><span class="ctag ct-stat">Skill-level modelling</span><span class="ctag ct-stat">Coherence across distributions</span><span class="ctag ct-stat">Maia-2 extension methodology</span></div>
+      <div class="concept-group"><span class="concept-cat">Statistical</span><span class="ctag ct-stat">Distributional shift analysis</span><span class="ctag ct-stat">Effect size measurement</span><span class="ctag ct-stat">Significance testing</span></div>
+      <div class="concept-group"><span class="concept-cat">Data engineering</span><span class="ctag ct-data">Big data PGN processing</span><span class="ctag ct-data">Elo band segmentation</span><span class="ctag ct-data">Postgres time-series schema</span></div>
+    </div>
+    <div class="expand-btn" onclick="toggle(this)"><span>Abstract, research questions &amp; tasks</span><span class="arrow">▼</span></div>
+    <div class="expandable">
+      <div class="card-section-label" style="margin-bottom:6px">Abstract</div>
+      <div class="abstract-block">Maia-2 (NeurIPS 2024) established that human chess behaviour can be modelled coherently across skill levels using a unified neural architecture, but explicitly acknowledged that the model does not produce actionable improvement pathways — it cannot tell a 1400-rated player which specific behavioural changes would move them to 1600. This project addresses that gap directly. Using the full Lichess database segmented into 100-Elo bands, we extract a multi-dimensional behavioural profile for each band: time allocation per game phase, move-type distribution, tactical vs positional preference, blunder category frequencies, and endgame conversion rates. The result is a continuous behavioural atlas that maps what concretely and measurably changes in how players think and decide as skill increases — turning the Maia-2 model into an actionable coaching instrument.</div>
+      <div class="card-section-label" style="margin-bottom:6px">Research questions</div>
+      <ul class="rq-list">
+        <li>Which behavioural features — time allocation, move-type distribution, blunder category, positional preference — show the largest and most consistent change across adjacent 100-Elo bands in the Lichess population?</li>
+        <li>Are the behavioural transitions between Elo bands gradual and continuous, or do they cluster around specific threshold ratings where qualitative shifts occur?</li>
+        <li>Does a player's current behavioural profile predict their likely Elo band more accurately than their actual game outcomes over a short window, and can this be used for early identification of under/over-rated players?</li>
+        <li>Which specific behavioural features at Elo band N best predict whether a player will progress to band N+1 within 6 months, based on longitudinal Lichess data?</li>
+      </ul>
+      <div class="card-section-label" style="margin-bottom:6px">Tasks</div>
+      <ul class="task-list">
+        <li>Download and decompress Lichess DB monthly dumps — start with 6 months of data, ~50M games</li>
+        <li>Build efficient PGN batch processor: extract per-game features at scale using python-chess + multiprocessing</li>
+        <li>Segment all games into 100-Elo bands (both players) — store band-level aggregate feature distributions in Postgres</li>
+        <li>Run Maia move-match probability at each band's Elo — use as a human-likeness baseline per band</li>
+        <li>Compute effect sizes between adjacent bands for each feature — identify which features change most significantly</li>
+        <li>Apply UMAP dimensionality reduction to band feature vectors — visualise the behavioural space as a 2D atlas</li>
+        <li>Run significance testing on band-to-band feature deltas — filter to features with p &lt; 0.01 and Cohen's d &gt; 0.3</li>
+        <li>Plot your personal C1 fingerprint onto the atlas — identify where you sit and which band's profile you're closest to</li>
+        <li>Write up preliminary findings as a blog post with atlas visualisation — target r/chess and r/MachineLearning</li>
+        <li>Email CSSLab (University of Toronto) with preliminary results and atlas methodology — propose collaboration or feedback</li>
+        <li>Draft workshop paper for KDD 2027 or CHI 2027 — deadline typically September 2026</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="card-header">
+      <div class="card-title-row"><span class="card-id id-research">R2</span><span class="card-title">Style-matched GM curriculum</span></div>
+      <div class="badges"><span class="badge b-high">High priority</span><span class="badge b-mono">Monetizable</span><span class="badge b-pub">Research angle</span></div>
+    </div>
+    <div class="card-desc">The coaching product. Every chess improvement platform teaches GM mainlines. None personalise to your behavioral style. This uses your C1 fingerprint to find which GMs' decision-making profiles most resemble yours structurally — then pulls their games filtered to positions you actually reach and areas where you struggle.</div>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card-section-label">The matching algorithm</div>
+      <div class="card-detail">Extract behavioral features from a curated set of historical GMs using the same C1 pipeline: time allocation patterns, positional vs tactical ratio, endgame preferences, opening diversity. Cosine similarity between your feature vector and each GM's vector across your problem position types. Output: top 3 style-matched GMs with confidence score per position category.</div>
+    </div>
+    <div class="card-row">
+      <div class="card-section-label">The curriculum layer</div>
+      <div class="card-detail">Filter matched GM's Lichess games to: your opening lines (ECO codes you play), your C2 problem position types, comparable opponent Elo. Extract the 10–15 most instructive examples. Claude generates natural language annotations explaining the GM's decision at each critical moment in terms of principles, not engine lines.</div>
+    </div>
+    <div class="card-row">
+      <div class="card-section-label">Why it doesn't compete with Chessable</div>
+      <div class="card-detail">Chessable is a content platform. This is a personalisation engine. B2B angle: sell to chess coaches as a tool that auto-generates a personalised study plan for each student. Coaches pay €30–50/month per tool. That's a different business model — recurring SaaS, not one-time course purchase.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="tag-row"><span class="tag">C1 fingerprint</span><span class="tag">GM PGN corpus</span><span class="tag">Cosine similarity</span><span class="tag">Claude API</span><span class="tag">Coach B2B</span></div>
+    <div class="concepts-block">
+      <div class="concepts-label">AI / ML concepts required</div>
+      <div class="concept-group"><span class="concept-cat">Gen AI — RAG</span><span class="ctag ct-rag">Semantic retrieval</span><span class="ctag ct-rag">Context-window management</span><span class="ctag ct-rag">Personalised retrieval</span></div>
+      <div class="concept-group"><span class="concept-cat">Gen AI — LLM</span><span class="ctag ct-llm">Instructional annotation generation</span><span class="ctag ct-llm">Few-shot prompting</span><span class="ctag ct-llm">Long-context reasoning</span></div>
+      <div class="concept-group"><span class="concept-cat">Gen AI — Agents</span><span class="ctag ct-agent">Multi-step agentic pipeline</span><span class="ctag ct-agent">Memory-augmented agents (MemCollab)</span><span class="ctag ct-agent">Personalisation agents (PAHF)</span></div>
+      <div class="concept-group"><span class="concept-cat">ML fundamentals</span><span class="ctag ct-ml">Cosine similarity matching</span><span class="ctag ct-ml">Vector space modelling</span><span class="ctag ct-ml">Style transfer concepts</span></div>
+      <div class="concept-group"><span class="concept-cat">Embeddings</span><span class="ctag ct-embed">Behavioural feature vectors</span><span class="ctag ct-embed">Qdrant hybrid indexing</span></div>
+    </div>
+    <div class="expand-btn" onclick="toggle(this)"><span>Abstract, research questions &amp; tasks</span><span class="arrow">▼</span></div>
+    <div class="expandable">
+      <div class="card-section-label" style="margin-bottom:6px">Abstract</div>
+      <div class="abstract-block">Chess coaching has long recognised that players improve fastest by studying GMs whose style resembles their own — a positional player learning from Petrosian internalises ideas more readily than from Tal. However, this matching has always been intuitive and manual, performed by experienced coaches. This project automates the match by computing cosine similarity between a student's C1 behavioural feature vector and the extracted profiles of a curated corpus of historical GMs, weighted by the student's specific weakness categories. The result is a ranked list of style-matched GMs, filtered to their games in positions the student actually reaches, annotated by an LLM with principle-based explanations rather than engine lines. This is the automated version of what a human second does — and the basis for a B2B coaching tool.</div>
+      <div class="card-section-label" style="margin-bottom:6px">Research questions</div>
+      <ul class="rq-list">
+        <li>Can a player's behavioural feature vector (from C1) reliably identify GMs whose decision-making profiles are structurally similar across the position types that matter most to that player's weaknesses?</li>
+        <li>Does studying games from a style-matched GM — filtered to the student's specific problem positions — produce measurable improvement in those position types compared to studying GM games chosen by theory relevance alone?</li>
+        <li>How many annotated GM game examples are required per weakness category before a student shows measurable improvement on that category in their own games?</li>
+        <li>Can LLM-generated principle-based annotations of GM decisions substitute for human coach annotations in terms of instructional value and player comprehension?</li>
+      </ul>
+      <div class="card-section-label" style="margin-bottom:6px">Tasks</div>
+      <ul class="task-list">
+        <li>Build GM feature corpus: select 30–50 historical GMs with well-documented styles — extract behavioural feature vectors from their Lichess games using the C1 pipeline</li>
+        <li>Implement weighted cosine similarity matcher: compare player's C1 vector against GM corpus, weighted by the player's C2 weak position categories</li>
+        <li>Build GM game retrieval layer: for top-3 matched GMs, filter their Lichess games to player's ECO codes and weak position types</li>
+        <li>Build position extractor: for each retrieved game, identify the 10-move window around the critical decision point</li>
+        <li>Build Claude annotation pipeline: few-shot prompted with example annotations — produce principle-based explanation of GM's decision (not engine evaluation)</li>
+        <li>Build curriculum sequencer: order annotated examples by difficulty (Stockfish complexity score) — serve easiest first, escalate</li>
+        <li>Implement MemCollab memory layer: Claude and local model share Qdrant memory — Claude insights get distilled into cheaper local inference for repeat lookups</li>
+        <li>Build coach-facing API: given a student username, return their style-matched GM, top 10 study games, and annotated curriculum — JSON output suitable for a coach dashboard</li>
+        <li>Run pilot with 3–5 chess coaches — collect feedback on curriculum quality and relevance</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="card-header">
+      <div class="card-title-row"><span class="card-id id-new">R3</span><span class="card-title">Behavioral dataset for fair-play research</span></div>
+      <div class="badges"><span class="badge b-med">Medium priority</span><span class="badge b-pub">Community contribution</span><span class="badge b-csslab">CSSLab hook</span></div>
+    </div>
+    <div class="card-desc">The fair-play research community lacks labeled behavioral data capturing the spectrum of human move types — not just "human vs engine" but the subtler categories within human play. Your C8 work produces exactly this as a byproduct. Package it as a community contribution.</div>
+    <div class="divider"></div>
+    <div class="card-row">
+      <div class="card-section-label">What you contribute</div>
+      <div class="card-detail">10K games with self-labeled move categories: opening prep (fast, theory-based), active calculation (slow, deliberate), intuitive decisions (fast, positional), time-pressure moves (fast, stressed), post-blunder moves (emotional state indicators). Combined with Maia move-match probabilities and Stockfish eval. Format compatible with Irwin and CSSLab datasets. Released on HuggingFace.</div>
+    </div>
+    <div class="card-row">
+      <div class="card-section-label">Why this matters for you</div>
+      <div class="card-detail">A well-documented dataset release gets cited. Citations lead to collaborations. Collaborations lead to research roles. It costs relatively little — it's a byproduct of C8 — but its research value is high because this type of granular self-labeled data genuinely doesn't exist publicly.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="tag-row"><span class="tag">C8 output</span><span class="tag">Maia features</span><span class="tag">HuggingFace release</span><span class="tag">CSSLab compatible</span><span class="tag">Irwin format</span></div>
+    <div class="concepts-block">
+      <div class="concepts-label">AI / ML concepts required</div>
+      <div class="concept-group"><span class="concept-cat">ML fundamentals</span><span class="ctag ct-ml">Dataset curation and labelling</span><span class="ctag ct-ml">Inter-rater reliability</span><span class="ctag ct-ml">Behavioural annotation schema</span></div>
+      <div class="concept-group"><span class="concept-cat">Human-AI alignment</span><span class="ctag ct-stat">Fair-play detection methodology</span><span class="ctag ct-stat">Human vs engine stylometry</span><span class="ctag ct-stat">Subtle cheat pattern taxonomy</span></div>
+      <div class="concept-group"><span class="concept-cat">Data engineering</span><span class="ctag ct-data">Dataset versioning (DVC)</span><span class="ctag ct-data">HuggingFace dataset schema</span><span class="ctag ct-data">Irwin-compatible format</span><span class="ctag ct-data">Move-level metadata</span></div>
+    </div>
+    <div class="expand-btn" onclick="toggle(this)"><span>Abstract, research questions &amp; tasks</span><span class="arrow">▼</span></div>
+    <div class="expandable">
+      <div class="card-section-label" style="margin-bottom:6px">Abstract</div>
+      <div class="abstract-block">Fair-play detection research is constrained by a fundamental data problem: existing labeled datasets either conflate all human moves as one category or use synthetically generated "cheating" patterns that don't reflect real subtle engine use. What's missing is a granular, move-level labeled dataset that distinguishes the spectrum of human move types — from confident theory recall to panicked time-pressure decisions — because these categories have radically different temporal and quality signatures that overlap with both clean play and subtle cheating. This project produces exactly that dataset as a byproduct of C8: 10,000 personal games with move-level labels across five behavioural categories, combined with Maia move-match probabilities and Stockfish evaluations, released publicly in a format compatible with the Irwin and CSSLab detection frameworks.</div>
+      <div class="card-section-label" style="margin-bottom:6px">Research questions</div>
+      <ul class="rq-list">
+        <li>Do the five proposed move categories (prep, calculation, intuition, time-pressure, post-blunder) exhibit statistically distinct distributions across think time, Maia move-match probability, and eval delta — and are these distributions stable across different time controls?</li>
+        <li>Can a classifier trained on these move-level categories distinguish subtle engine use (where only 30–40% of moves are engine-assisted) from clean play with greater accuracy than centipawn loss alone?</li>
+        <li>What is the minimum number of labeled games required to train a reliable move-category classifier that generalises to unseen players, and how does this interact with player Elo?</li>
+        <li>Do the temporal signatures of "preparation" moves (fast, theory-based) resemble engine-assisted moves in ways that cause false positives in current detection systems?</li>
+      </ul>
+      <div class="card-section-label" style="margin-bottom:6px">Tasks</div>
+      <ul class="task-list">
+        <li>Define the labelling schema: 5 move categories with explicit decision rules for each — document edge cases and ambiguities</li>
+        <li>Run C8 pipeline to generate think-time features for all 10K games</li>
+        <li>Apply rule-based auto-labeller: assign initial labels using heuristics (move number + think time + clock remaining + Maia score)</li>
+        <li>Manual review sample: review 500 auto-labeled moves for correctness — refine rules based on errors</li>
+        <li>Compute Maia move-match probabilities at player's Elo for all moves — add as feature column</li>
+        <li>Run Stockfish eval on all positions — add eval, best move, and depth-10 vs depth-20 eval delta as features</li>
+        <li>Structure dataset as Parquet: game_id, move_num, FEN, move, think_time, clock_remaining, label, maia_prob, stockfish_eval, eval_delta, phase, ECO</li>
+        <li>Version with DVC — track dataset lineage from raw PGN to final Parquet</li>
+        <li>Write HuggingFace dataset card: schema description, labelling methodology, intended use, known limitations, citation format</li>
+        <li>Release publicly and post to chess fair-play research forums and CSSLab GitHub discussions</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- DROPPED -->
+<div id="dropped" class="section">
+  <div class="project-card">
+    <div class="card-header">
+      <div class="card-title-row"><span class="card-id id-drop">C5</span><span class="card-title">Chess vision: board detection</span></div>
+      <div class="badges"><span class="badge b-low">Dropped</span></div>
+    </div>
+    <div class="card-desc">YOLOv8 board detection from images and video is a solved, open-source problem. Multiple well-maintained repos already do this well. Adds nothing to your research portfolio and nothing to the community. The only interesting angle — pairing it with your behavioral model — is a product feature, not a research project. Can be added later as a thin UI wrapper at minimal cost.</div>
+    <div class="divider"></div>
+    <div class="mono-block"><b>If you revisit it:</b> build it as a thin wrapper that converts any image/video frame to FEN, then pipes straight into your existing C1/C2 analysis pipeline. Two days of work, not a standalone project.</div>
+  </div>
+  <div class="project-card">
+    <div class="card-header">
+      <div class="card-title-row"><span class="card-id id-drop">I4</span><span class="card-title">AWS serverless pipeline</span></div>
+      <div class="badges"><span class="badge b-low">Dropped</span></div>
+    </div>
+    <div class="card-desc">Lambda + SQS + DynamoDB + EventBridge is unnecessary complexity given you already have a Mac Mini M4 Pro and a Hetzner VPS running k3s. Adds cost unpredictability, vendor lock-in, and a second deployment target to maintain. Your I5 + I1 + I8 stack handles everything you need.</div>
+    <div class="divider"></div>
+    <div class="mono-block"><b>The only valid reason to revisit:</b> if you productize R2 as a SaaS and need multi-tenant scale. At that point use AWS or Fly.io. Not before.</div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<div id="timeline" class="section">
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">Now → May 2026</div>
+      <div class="tl-content">
+        <h3>Foundation: fingerprint + data pipeline</h3>
+        <p>Complete C1 behavioral fingerprint pipeline on your 10K games. Set up Lichess DB local extract (just your ECO codes + Elo band to start). Get C8 timestamp labeling running. These three feed everything else.</p>
+        <div class="tl-tags"><span class="tag">C1</span><span class="tag">C8</span><span class="tag">Lichess pipe</span><span class="tag">I5 ✓</span><span class="tag">I9 ✓</span></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">May → Jul 2026</div>
+      <div class="tl-content">
+        <h3>Core agents: C2 + C3 with GM layer</h3>
+        <p>Blunder classifier with GM context queries. Repertoire builder with style-aware filtering. LangGraph API live. Qdrant RAG platform with hybrid search. First working end-to-end: game in → personalised feedback out with GM examples.</p>
+        <div class="tl-tags"><span class="tag">C2</span><span class="tag">C3</span><span class="tag">I3</span><span class="tag">I7</span></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Jul → Sep 2026</div>
+      <div class="tl-content">
+        <h3>Research: Rating Band Atlas first results</h3>
+        <p>Start R1 Atlas with a focused slice — 3–4 rating bands, 3–4 behavioral features. Write first blog post with findings. Email CSSLab. Build C4 opponent profiling and C6 continuous learning pipeline.</p>
+        <div class="tl-tags"><span class="tag">R1 v1</span><span class="tag">C4</span><span class="tag">C6</span><span class="tag">Blog post</span><span class="tag">CSSLab email</span></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Sep → Dec 2026</div>
+      <div class="tl-content">
+        <h3>Full Atlas + R2 curriculum prototype</h3>
+        <p>Full Rating Band Atlas across all Elo bands. R3 dataset packaged and released on HuggingFace. R2 Style-Matched GM Curriculum working prototype. k3s production deployment. If Atlas results are strong — workshop paper submission for KDD 2027.</p>
+        <div class="tl-tags"><span class="tag">R1 full</span><span class="tag">R2</span><span class="tag">R3 release</span><span class="tag">I1</span><span class="tag">Paper submission</span></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">2027</div>
+      <div class="tl-content">
+        <h3>Productize or research path</h3>
+        <p>If R2 curriculum prototype gets traction from coaches: productize as B2B SaaS. If R1 Atlas paper gets accepted: pursue research collaboration or apply to research-oriented roles at King, chess.com, or academic labs. These paths are not mutually exclusive.</p>
+        <div class="tl-tags"><span class="tag">R2 SaaS</span><span class="tag">Research collab</span><span class="tag">Hiring signal</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MONEY -->
+<div id="money" class="section">
+  <div style="margin-bottom:1.5rem">
+    <div class="card-section-label" style="margin-bottom:8px">Monetization paths by project</div>
+    <div class="mono-path">
+      <div class="mono-card">
+        <h3>R2 — Coach SaaS</h3>
+        <p>Personalised curriculum tool for chess coaches. €30–50/month per coach. B2B, doesn't compete with Chessable. 50 coaches = €1500–2500/month.</p>
+        <span class="timeline-pill pill-18">12–18 months</span>
+      </div>
+      <div class="mono-card">
+        <h3>R1 — Research role</h3>
+        <p>Atlas results as portfolio piece. Opens doors at King, chess.com data teams, CSSLab collaboration, KTH/Chalmers research positions in Göteborg.</p>
+        <span class="timeline-pill pill-12">12 months</span>
+      </div>
+      <div class="mono-card">
+        <h3>C1–C4 stack — ML hire</h3>
+        <p>End-to-end behavioral modeling + agentic system. Positions you for ML engineer roles at gaming companies (King, Paradox) or any LLM product company.</p>
+        <span class="timeline-pill pill-6">6–9 months</span>
+      </div>
+      <div class="mono-card">
+        <h3>R3 dataset — Research credibility</h3>
+        <p>HuggingFace release cited by fair-play papers. Indirect: leads to collaborations. Direct: demonstrates research contribution in job applications.</p>
+        <span class="timeline-pill pill-12">10–12 months</span>
+      </div>
+      <div class="mono-card">
+        <h3>Infra skills — Consulting</h3>
+        <p>LangGraph + multi-agent + RAG is scarce now. 800–1500 SEK/hr freelance rate in Sweden while building the research work in parallel.</p>
+        <span class="timeline-pill pill-6">Now</span>
+      </div>
+    </div>
+  </div>
+  <div class="card-row">
+    <div class="card-section-label">What ages well vs what doesn't</div>
+    <div class="asset-row">
+      <div class="asset-box"><div class="asset-label" style="color:#0F6E56">Ages well — invest here</div><p>Domain expertise in behavioral modeling. The Lichess + personal dataset. Research findings and publications. Chess + ML intuition for what to build next.</p></div>
+      <div class="asset-box"><div class="asset-label" style="color:#A32D2D">Ages poorly — don't over-invest</div><p>LangGraph specifics. k3s configuration. Any particular RAG library. The orchestration plumbing gets abstracted away in 2–3 years.</p></div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+function show(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('visible'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  el.classList.add('active');
+}
+function toggle(btn){
+  const exp=btn.nextElementSibling;
+  const open=exp.classList.toggle('open');
+  btn.classList.toggle('open',open);
+  btn.querySelector('span:first-child').textContent=open?'Hide abstract, research questions & tasks':'Abstract, research questions & tasks';
+}
+</script>
+</body>
+</html>
