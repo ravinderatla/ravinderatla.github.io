@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chess Lab — Living Research Feed</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0f0f;
+  --bg2:#161717;
+  --bg3:#1e1f1f;
+  --border:#2a2b2b;
+  --border2:#333;
+  --text:#e8e6e0;
+  --text2:#9a9890;
+  --text3:#5a5856;
+  --accent:#c8f060;
+  --accent2:#7dd4a8;
+  --accent3:#f0a060;
+  --accent4:#80b4f0;
+  --red:#f06060;
+  --mono:'DM Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
+.shell{max-width:900px;margin:0 auto;padding:2rem 1.25rem}
+
+/* header */
+.hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:0.5px solid var(--border)}
+.hdr-left h1{font-family:var(--mono);font-size:15px;font-weight:400;color:var(--accent);letter-spacing:0.5px}
+.hdr-left p{font-size:12px;color:var(--text3);margin-top:3px;font-family:var(--mono)}
+.hdr-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--border2);color:var(--text2)}
+.pill.active{border-color:var(--accent);color:var(--accent);background:rgba(200,240,96,0.07)}
+
+/* domain filter bar */
+.filter-bar{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap}
+.fchip{font-size:11px;font-family:var(--mono);padding:4px 12px;border-radius:4px;border:0.5px solid var(--border2);color:var(--text2);cursor:pointer;background:transparent;transition:all 0.15s}
+.fchip:hover{border-color:var(--text2);color:var(--text)}
+.fchip.on{background:var(--bg3);border-color:var(--accent2);color:var(--accent2)}
+
+/* search bar */
+.search-row{display:flex;gap:8px;margin-bottom:1.5rem}
+.search-input{flex:1;background:var(--bg2);border:0.5px solid var(--border2);border-radius:6px;padding:9px 14px;color:var(--text);font-family:var(--sans);font-size:13px;outline:none;transition:border-color 0.15s}
+.search-input:focus{border-color:var(--accent2)}
+.search-input::placeholder{color:var(--text3)}
+.btn{padding:9px 18px;border-radius:6px;border:0.5px solid var(--border2);font-family:var(--mono);font-size:12px;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#0e0f0f;border-color:var(--accent);font-weight:500}
+.btn-primary:hover{background:#d8f870}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--text2)}
+.btn-ghost:hover{border-color:var(--text2);color:var(--text)}
+
+/* tabs */
+.tabs{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:0.5px solid var(--border)}
+.tab{font-size:12px;font-family:var(--mono);padding:8px 16px;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;transition:all 0.15s;background:transparent;border-top:none;border-left:none;border-right:none}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* cards */
+.cards{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;transition:border-color 0.15s;position:relative}
+.card:hover{border-color:var(--border2)}
+.card.pinned{border-left:2px solid var(--accent);padding-left:1.15rem}
+.card.chess-lab{border-left:2px solid var(--accent2)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.card-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.ctag{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:3px;font-weight:400}
+.ct-behav{background:rgba(125,212,168,0.12);color:var(--accent2);border:0.5px solid rgba(125,212,168,0.25)}
+.ct-rating{background:rgba(128,180,240,0.12);color:var(--accent4);border:0.5px solid rgba(128,180,240,0.25)}
+.ct-style{background:rgba(240,160,96,0.12);color:var(--accent3);border:0.5px solid rgba(240,160,96,0.25)}
+.ct-chess{background:rgba(200,240,96,0.1);color:var(--accent);border:0.5px solid rgba(200,240,96,0.2)}
+.ct-gaming{background:rgba(200,150,240,0.12);color:#c896f0;border:0.5px solid rgba(200,150,240,0.25)}
+.ct-edu{background:rgba(240,200,96,0.12);color:#f0c860;border:0.5px solid rgba(240,200,96,0.25)}
+.ct-sport{background:rgba(240,96,96,0.12);color:var(--red);border:0.5px solid rgba(240,96,96,0.25)}
+.ct-other{background:rgba(150,150,150,0.1);color:var(--text2);border:0.5px solid rgba(150,150,150,0.2)}
+.card-actions{display:flex;gap:6px;flex-shrink:0}
+.icon-btn{background:transparent;border:0.5px solid var(--border2);border-radius:4px;color:var(--text3);cursor:pointer;font-size:11px;padding:3px 8px;font-family:var(--mono);transition:all 0.15s}
+.icon-btn:hover{border-color:var(--text2);color:var(--text)}
+.icon-btn.pinned-active{border-color:var(--accent);color:var(--accent);background:rgba(200,240,96,0.07)}
+.icon-btn.lab-active{border-color:var(--accent2);color:var(--accent2);background:rgba(125,212,168,0.07)}
+.card-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:5px;line-height:1.4}
+.card-body{font-size:13px;color:var(--text2);line-height:1.65}
+.card-body b{color:var(--text);font-weight:500}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:0.5px solid var(--border)}
+.card-src{font-size:11px;font-family:var(--mono);color:var(--text3)}
+.card-transfer{font-size:11px;color:var(--accent3);font-family:var(--mono)}
+
+/* transfer ideas block */
+.transfer-block{margin-top:10px;padding:10px;background:var(--bg3);border-radius:6px;border:0.5px solid var(--border)}
+.transfer-label{font-size:10px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.transfer-item{font-size:12px;color:var(--text2);line-height:1.55;padding:4px 0;border-bottom:0.5px solid var(--border);display:flex;gap:8px}
+.transfer-item:last-child{border-bottom:none}
+.transfer-item::before{content:"→";color:var(--accent3);flex-shrink:0}
+
+/* add idea panel */
+.add-panel{background:var(--bg2);border:0.5px solid var(--border2);border-radius:10px;padding:1.25rem;margin-bottom:1.5rem}
+.add-panel h3{font-size:12px;font-family:var(--mono);color:var(--text2);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.form-row.full{grid-template-columns:1fr}
+input.fi,textarea.fi,select.fi{width:100%;background:var(--bg3);border:0.5px solid var(--border2);border-radius:6px;padding:8px 12px;color:var(--text);font-family:var(--sans);font-size:13px;outline:none;transition:border-color 0.15s}
+input.fi:focus,textarea.fi:focus,select.fi:focus{border-color:var(--accent2)}
+input.fi::placeholder,textarea.fi::placeholder{color:var(--text3)}
+select.fi option{background:var(--bg3);color:var(--text)}
+textarea.fi{resize:vertical;min-height:72px;line-height:1.5}
+
+/* spinner */
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(200,240,96,0.2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* status bar */
+.status{font-size:11px;font-family:var(--mono);color:var(--text3);padding:8px 0;min-height:26px}
+.status.loading{color:var(--accent2)}
+.status.error{color:var(--red)}
+.status.ok{color:var(--accent)}
+
+/* empty state */
+.empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-family:var(--mono);font-size:12px}
+.empty span{display:block;font-size:28px;margin-bottom:8px;opacity:0.4}
+
+/* section label */
+.sec-label{font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.6px;color:var(--text3);margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid var(--border)}
+
+/* count badge */
+.count{font-size:10px;font-family:var(--mono);background:var(--bg3);border:0.5px solid var(--border2);color:var(--text3);padding:1px 7px;border-radius:10px;margin-left:6px}
+
+@media(max-width:600px){
+  .form-row{grid-template-columns:1fr}
+  .hdr{flex-direction:column}
+  .search-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<div class="hdr">
+  <div class="hdr-left">
+    <h1>// chess_lab research feed</h1>
+    <p>living ideas · behavioral modelling · cross-domain transfer · april 2026</p>
+  </div>
+  <div class="hdr-right">
+    <span class="pill active" id="total-pill">0 ideas</span>
+    <span class="pill" id="pinned-pill">0 pinned</span>
+    <span class="pill" id="lab-pill">0 → lab</span>
+  </div>
+</div>
+
+<!-- filter bar -->
+<div class="filter-bar">
+  <button class="fchip on" data-domain="all" onclick="setDomain('all',this)">all</button>
+  <button class="fchip" data-domain="behavioral" onclick="setDomain('behavioral',this)">behavioral modelling</button>
+  <button class="fchip" data-domain="rating" onclick="setDomain('rating',this)">rating / skill progression</button>
+  <button class="fchip" data-domain="style" onclick="setDomain('style',this)">style matching</button>
+  <button class="fchip" data-domain="chess" onclick="setDomain('chess',this)">chess-specific</button>
+  <button class="fchip" data-domain="gaming" onclick="setDomain('gaming',this)">gaming / esports</button>
+  <button class="fchip" data-domain="education" onclick="setDomain('education',this)">education / learning</button>
+  <button class="fchip" data-domain="sport" onclick="setDomain('sport',this)">sports science</button>
+</div>
+
+<!-- search row -->
+<div class="search-row">
+  <input class="search-input" id="search-input" placeholder="e.g. behavioral fingerprinting in esports, skill acquisition plateau detection..." />
+  <button class="btn btn-primary" id="fetch-btn" onclick="fetchIdeas()">fetch new ideas</button>
+  <button class="btn btn-ghost" onclick="showAdd()">+ add manual</button>
+</div>
+
+<div class="status" id="status"></div>
+
+<!-- add panel (hidden by default) -->
+<div class="add-panel" id="add-panel" style="display:none">
+  <h3>add idea manually</h3>
+  <div class="form-row full">
+    <input class="fi" id="m-title" placeholder="title / idea name" />
+  </div>
+  <div class="form-row full">
+    <textarea class="fi" id="m-body" placeholder="describe the idea, what's the research angle, why is it interesting..."></textarea>
+  </div>
+  <div class="form-row">
+    <select class="fi" id="m-domain">
+      <option value="behavioral">behavioral modelling</option>
+      <option value="rating">rating / skill progression</option>
+      <option value="style">style matching</option>
+      <option value="chess">chess-specific</option>
+      <option value="gaming">gaming / esports</option>
+      <option value="education">education / learning</option>
+      <option value="sport">sports science</option>
+      <option value="other">other</option>
+    </select>
+    <input class="fi" id="m-src" placeholder="source / paper / url (optional)" />
+  </div>
+  <div class="form-row full">
+    <textarea class="fi" id="m-transfer" placeholder="cross-domain transfer ideas — how could this apply to chess, gaming, education, sports? (optional)" style="min-height:52px"></textarea>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button class="btn btn-primary" onclick="addManual()">save idea</button>
+    <button class="btn btn-ghost" onclick="hideAdd()">cancel</button>
+  </div>
+</div>
+
+<!-- tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('all',this)">all ideas <span class="count" id="cnt-all">0</span></button>
+  <button class="tab" onclick="showTab('pinned',this)">pinned <span class="count" id="cnt-pinned">0</span></button>
+  <button class="tab" onclick="showTab('lab',this)">→ chess lab <span class="count" id="cnt-lab">0</span></button>
+</div>
+
+<div class="cards" id="cards-container">
+  <div class="empty"><span>◈</span>no ideas yet — hit "fetch new ideas" to pull research from the frontier, or add one manually.</div>
+</div>
+
+</div>
+
+<script>
+const DOMAIN_TAGS = {
+  behavioral:{label:'behavioral modelling',cls:'ct-behav'},
+  rating:{label:'rating / skill',cls:'ct-rating'},
+  style:{label:'style matching',cls:'ct-style'},
+  chess:{label:'chess',cls:'ct-chess'},
+  gaming:{label:'gaming / esports',cls:'ct-gaming'},
+  education:{label:'education',cls:'ct-edu'},
+  sport:{label:'sports science',cls:'ct-sport'},
+  other:{label:'other',cls:'ct-other'}
+};
+
+let state = {
+  ideas:[],
+  tab:'all',
+  domain:'all'
+};
+
+async function loadState(){
+  try{
+    const r = await window.storage.get('research_feed_v1');
+    if(r && r.value) state.ideas = JSON.parse(r.value);
+  }catch(e){ state.ideas=[]; }
+  render();
+}
+
+async function saveState(){
+  try{ await window.storage.set('research_feed_v1', JSON.stringify(state.ideas)); }catch(e){}
+}
+
+function setStatus(msg,type=''){
+  const el=document.getElementById('status');
+  el.className='status'+(type?' '+type:'');
+  el.innerHTML=msg;
+}
+
+async function callClaude(messages, system){
+  const resp = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:4000,
+      system,
+      messages
+    })
+  });
+  if(!resp.ok){
+    const err = await resp.json().catch(()=>({}));
+    throw new Error(err.error?.message || `API error ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+}
+
+function extractJSON(raw){
+  // try direct parse first
+  try{ return JSON.parse(raw.trim()); }catch(e){}
+  // strip markdown fences
+  const stripped = raw.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+  try{ return JSON.parse(stripped); }catch(e){}
+  // extract first {...} block
+  const m = stripped.match(/\{[\s\S]*\}/);
+  if(m){ try{ return JSON.parse(m[0]); }catch(e){} }
+  throw new Error('response was not valid JSON — try again');
+}
+
+async function fetchIdeas(){
+  const query = document.getElementById('search-input').value.trim();
+  const btn = document.getElementById('fetch-btn');
+  btn.disabled=true;
+  btn.textContent='fetching...';
+
+  const domainCtx = state.domain==='all'
+    ? 'behavioral modelling, rating band progression, style matching, chess AI, gaming analytics, educational skill acquisition, sports science performance modelling'
+    : DOMAIN_TAGS[state.domain]?.label || state.domain;
+
+  const userQuery = query || domainCtx;
+
+  setStatus('<span class="spinner"></span>generating research ideas — 10–20 seconds...','loading');
+
+  const system = `You are a research scout for a chess AI lab specialising in behavioral modelling, skill progression, style matching, and human-AI alignment. Surface genuinely interesting, research-grade ideas — from chess AND adjacent domains (esports, sports science, education, cognitive science, music, language learning). Assess cross-domain transfer for every idea.
+
+CRITICAL: respond with ONLY a raw JSON object. No markdown fences, no preamble, no explanation text before or after. Start your response with { and end with }.
+
+Required schema:
+{"ideas":[{"title":"string","domain":"behavioral|rating|style|chess|gaming|education|sport|other","body":"2-3 sentences: what is the idea, what gap does it address, why is it novel","source":"paper title / venue / URL if known, else 'synthesis'","transfer":["how this applies to domain X","how this applies to domain Y"],"chess_lab_relevant":true}]}
+
+Rules:
+- Generate exactly 7 ideas
+- domain must be one of the enum values above
+- transfer array must have 2-3 items
+- chess_lab_relevant is boolean
+- body must be 2-3 sentences, no more
+- Prioritise actionable ideas for a solo researcher with Lichess data and standard ML stack
+- Mix chess-specific and cross-domain ideas`;
+
+  const userMsg = `Generate 7 research ideas about: ${userQuery}
+
+Focus areas for this session:
+- What recent techniques in behavioral modelling transfer to chess skill analysis?  
+- What's new in skill progression / rating band / plateau detection research?
+- What style-matching or personalisation techniques from other domains (music, language, gaming) could inform chess coaching?
+- What fair-play / anomaly detection approaches are underexplored?
+- What human-AI alignment research is most relevant to personalised chess coaching?
+
+Remember: respond with ONLY the raw JSON object, nothing else.`;
+
+  try{
+    const raw = await callClaude([{role:'user',content:userMsg}], system);
+    const parsed = extractJSON(raw);
+
+    if(!parsed.ideas || !Array.isArray(parsed.ideas)){
+      throw new Error('unexpected response structure — no ideas array found');
+    }
+
+    const newIdeas = parsed.ideas.map(idea=>({
+      id: Date.now() + Math.random(),
+      title: idea.title || 'untitled',
+      domain: idea.domain || 'other',
+      body: idea.body || '',
+      source: idea.source || 'synthesis',
+      transfer: Array.isArray(idea.transfer) ? idea.transfer : [],
+      chess_lab_relevant: !!idea.chess_lab_relevant,
+      pinned: false,
+      chess_lab: false,
+      added: new Date().toISOString(),
+      source_query: userQuery
+    }));
+
+    state.ideas = [...newIdeas, ...state.ideas];
+    await saveState();
+    setStatus(`✓ added ${newIdeas.length} new ideas`, 'ok');
+    render();
+
+  }catch(err){
+    setStatus(`error: ${err.message}`, 'error');
+    console.error('fetchIdeas error:', err);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='fetch new ideas';
+  }
+}
+
+function addManual(){
+  const title=document.getElementById('m-title').value.trim();
+  const body=document.getElementById('m-body').value.trim();
+  if(!title||!body){alert('title and description are required');return;}
+  const domain=document.getElementById('m-domain').value;
+  const src=document.getElementById('m-src').value.trim();
+  const transferRaw=document.getElementById('m-transfer').value.trim();
+  const transfer=transferRaw?transferRaw.split('\n').filter(Boolean):[];
+
+  state.ideas.unshift({
+    id:Date.now()+Math.random(),
+    title,body,domain,
+    source:src||'manual entry',
+    transfer,
+    chess_lab_relevant:false,
+    pinned:false,
+    chess_lab:false,
+    added:new Date().toISOString(),
+    source_query:'manual'
+  });
+  saveState();
+  hideAdd();
+  render();
+  setStatus('✓ idea added','ok');
+}
+
+function togglePin(id){
+  const idea=state.ideas.find(i=>i.id===id);
+  if(idea) idea.pinned=!idea.pinned;
+  saveState(); render();
+}
+
+function toggleLab(id){
+  const idea=state.ideas.find(i=>i.id===id);
+  if(idea) idea.chess_lab=!idea.chess_lab;
+  saveState(); render();
+}
+
+function deleteIdea(id){
+  state.ideas=state.ideas.filter(i=>i.id!==id);
+  saveState(); render();
+}
+
+function showTab(tab,el){
+  state.tab=tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function setDomain(domain,el){
+  state.domain=domain;
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  render();
+}
+
+function showAdd(){ document.getElementById('add-panel').style.display='block'; }
+function hideAdd(){
+  document.getElementById('add-panel').style.display='none';
+  ['m-title','m-body','m-src','m-transfer'].forEach(id=>document.getElementById(id).value='');
+}
+
+function fmtDate(iso){
+  try{return new Date(iso).toLocaleDateString('en-SE',{day:'numeric',month:'short'})}catch(e){return''}
+}
+
+function render(){
+  let visible = [...state.ideas];
+  if(state.tab==='pinned') visible=visible.filter(i=>i.pinned);
+  if(state.tab==='lab') visible=visible.filter(i=>i.chess_lab);
+  if(state.domain!=='all') visible=visible.filter(i=>i.domain===state.domain);
+
+  const pinCount = state.ideas.filter(i=>i.pinned).length;
+  const labCount = state.ideas.filter(i=>i.chess_lab).length;
+
+  document.getElementById('total-pill').textContent=`${state.ideas.length} ideas`;
+  document.getElementById('pinned-pill').textContent=`${pinCount} pinned`;
+  document.getElementById('lab-pill').textContent=`${labCount} → lab`;
+  document.getElementById('cnt-all').textContent=state.ideas.length;
+  document.getElementById('cnt-pinned').textContent=pinCount;
+  document.getElementById('cnt-lab').textContent=labCount;
+
+  const container=document.getElementById('cards-container');
+  if(visible.length===0){
+    const msg = state.tab==='pinned' ? 'no pinned ideas yet — hit ★ to pin any idea'
+              : state.tab==='lab' ? 'no ideas marked for chess lab yet — hit → lab on any idea'
+              : 'no ideas match this filter';
+    container.innerHTML=`<div class="empty"><span>◈</span>${msg}</div>`;
+    return;
+  }
+
+  container.innerHTML = visible.map(idea=>{
+    const dt = DOMAIN_TAGS[idea.domain]||DOMAIN_TAGS.other;
+    const hasTransfer = idea.transfer && idea.transfer.length>0;
+    const cardCls = ['card', idea.pinned?'pinned':'', idea.chess_lab?'chess-lab':''].filter(Boolean).join(' ');
+    return `
+<div class="${cardCls}" id="card-${idea.id}">
+  <div class="card-top">
+    <div class="card-meta">
+      <span class="ctag ${dt.cls}">${dt.label}</span>
+      ${idea.chess_lab_relevant?'<span class="ctag ct-chess">chess lab relevant</span>':''}
+      ${idea.pinned?'<span class="ctag" style="background:rgba(200,240,96,0.07);color:var(--accent);border:0.5px solid rgba(200,240,96,0.2)">★ pinned</span>':''}
+      ${idea.chess_lab?'<span class="ctag" style="background:rgba(125,212,168,0.07);color:var(--accent2);border:0.5px solid rgba(125,212,168,0.2)">→ chess lab</span>':''}
+    </div>
+    <div class="card-actions">
+      <button class="icon-btn ${idea.pinned?'pinned-active':''}" onclick="togglePin(${idea.id})" title="pin">${idea.pinned?'★ pinned':'☆ pin'}</button>
+      <button class="icon-btn ${idea.chess_lab?'lab-active':''}" onclick="toggleLab(${idea.id})" title="mark for chess lab">${idea.chess_lab?'✓ in lab':'→ lab'}</button>
+      <button class="icon-btn" onclick="deleteIdea(${idea.id})" title="remove">✕</button>
+    </div>
+  </div>
+  <div class="card-title">${idea.title}</div>
+  <div class="card-body">${idea.body}</div>
+  ${hasTransfer?`
+  <div class="transfer-block">
+    <div class="transfer-label">cross-domain transfer</div>
+    ${idea.transfer.map(t=>`<div class="transfer-item">${t}</div>`).join('')}
+  </div>`:''}
+  <div class="card-footer">
+    <span class="card-src">${idea.source||''}${idea.added?' · '+fmtDate(idea.added):''}</span>
+    ${hasTransfer?`<span class="card-transfer">${idea.transfer.length} transfer idea${idea.transfer.length>1?'s':''}</span>`:''}
+  </div>
+</div>`;
+  }).join('');
+}
+
+loadState();
+</script>
+</body>
+</html>
