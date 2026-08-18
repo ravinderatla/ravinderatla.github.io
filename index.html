@@ -7,7 +7,7 @@
 <meta name="description" content="Personal research site — behavioral modelling, skill progression, human-AI alignment in chess.">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a1a;background:#f9f8f5;padding:0;min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a1a;background:#f9f8f5;padding:0;min-height:100vh;font-size:16px}
 
 /* layout */
 .page{max-width:760px;margin:0 auto;padding:3rem 1.25rem 4rem}
@@ -24,9 +24,9 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1.4rem
 /* hero */
 .hero{padding:3.5rem 0 2.5rem;border-bottom:0.5px solid #e8e5dd;margin-bottom:2.5rem}
 .hero-eyebrow{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.8px;color:#aaa;margin-bottom:14px}
-.hero h1{font-size:32px;font-weight:500;letter-spacing:-0.8px;line-height:1.2;margin-bottom:16px;color:#1a1a1a}
+.hero h1{font-size:38px;font-weight:500;letter-spacing:-0.8px;line-height:1.2;margin-bottom:20px;color:#1a1a1a}
 .hero h1 em{font-style:normal;color:#0F6E56}
-.hero-bio{font-size:15px;color:#555;line-height:1.75;max-width:560px;margin-bottom:24px}
+.hero-bio{font-size:17px;color:#555;line-height:1.8;max-width:600px;margin-bottom:28px}
 .hero-bio b{color:#1a1a1a;font-weight:500}
 .hero-links{display:flex;gap:8px;flex-wrap:wrap}
 .hlink{font-size:12px;padding:6px 14px;border-radius:6px;border:0.5px solid #d5d2c8;color:#555;text-decoration:none;background:#fff;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px}
@@ -46,10 +46,10 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1.4rem
 .proj-card:hover{border-color:#aaa}
 .proj-card.featured{border-left:2px solid #0F6E56;padding-left:1.2rem}
 .proj-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px}
-.proj-title{font-size:14px;font-weight:500;color:#1a1a1a;line-height:1.3}
+.proj-title{font-size:16px;font-weight:500;color:#1a1a1a;line-height:1.3}
 .proj-arrow{font-size:12px;color:#ccc;flex-shrink:0;margin-top:2px}
 .proj-card:hover .proj-arrow{color:#888}
-.proj-desc{font-size:12px;color:#666;line-height:1.6;margin-bottom:10px}
+.proj-desc{font-size:14px;color:#666;line-height:1.6;margin-bottom:10px}
 .proj-tags{display:flex;gap:5px;flex-wrap:wrap}
 .ptag{font-size:10px;padding:2px 8px;border-radius:4px;border:0.5px solid #e0ddd5;color:#888;background:#fafaf8}
 .ptag.green{background:#E1F5EE;color:#0F6E56;border-color:#c5e8d8}
@@ -67,14 +67,14 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:1.4rem
 .focus-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
 .focus-item{background:#f5f4f0;border-radius:8px;padding:10px 12px}
 .focus-item .fi-id{font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;display:inline-block;margin-bottom:6px}
-.focus-item .fi-name{font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:2px}
-.focus-item .fi-desc{font-size:11px;color:#888;line-height:1.4}
+.focus-item .fi-name{font-size:14px;font-weight:500;color:#1a1a1a;margin-bottom:2px}
+.focus-item .fi-desc{font-size:13px;color:#888;line-height:1.4}
 
 /* interests */
 .interests-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
 .interest-box{background:#fff;border:0.5px solid #e0ddd5;border-radius:10px;padding:14px 16px}
 .interest-box h4{font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:4px}
-.interest-box p{font-size:11px;color:#888;line-height:1.5}
+.interest-box p{font-size:13px;color:#888;line-height:1.5}
 
 /* writing / notes */
 .note-list{display:flex;flex-direction:column;gap:6px}
@@ -112,10 +112,10 @@ footer a:hover{color:#888}
     <span class="nav-name">Ravinder Reddy Atla</span>
   </div>
   <div class="nav-links">
-    <a href="#projects">Projects</a>
-    <a href="#interests">Interests</a>
-    <a href="#writing">Writing</a>
-    <a href="https://github.com/ravinderatla" target="_blank">Github</a>
+    <a href="#projects">projects</a>
+    <a href="#interests">interests</a>
+    <a href="#writing">writing</a>
+    <a href="https://github.com/yourusername" target="_blank">github</a>
   </div>
 </nav>
 
@@ -123,7 +123,7 @@ footer a:hover{color:#888}
 
   <!-- HERO -->
   <div class="hero" id="about">
-    <div class="hero-eyebrow">Göteborg, Sweden</div>
+    <div class="hero-eyebrow">Based in Göteborg, Sweden</div>
     <h1>Behavioral modelling,<br><em>chess</em> &amp; AI research</h1>
     <p class="hero-bio">
       I'm <b>Ravinder Reddy Atla</b> — a solo ML researcher building a personal chess AI lab on top of 10,000+ personal games and the Lichess elite database. My work sits at the intersection of <b>behavioral modelling</b>, <b>human-AI alignment</b>, and <b>skill progression</b> — using chess as a model system where ground truth exists and data is abundant.
@@ -131,10 +131,10 @@ footer a:hover{color:#888}
       I'm particularly interested in what makes human decision-making at different skill levels measurably distinct, and whether those differences can be used to build genuinely personalised coaching systems — not just engine analysis with a friendlier UI.
     </p>
     <div class="hero-links">
-      <a class="hlink primary" href="chess_ai_lab_v2_projects.html">Chess AI Lab v2 →</a>
-      <a class="hlink" href="https://github.com/ravinderatla" target="_blank">GitHub</a>
-      <a class="hlink" href="https://linkedin.com/in/ravinder-atla" target="_blank">LinkedIn</a>
-      <a class="hlink" href="mailto:rednivaralat@gmail.com">Email</a>
+      <a class="hlink primary" href="chess-lab.html">Chess AI Lab v2 →</a>
+      <a class="hlink" href="https://github.com/yourusername" target="_blank">GitHub</a>
+      <a class="hlink" href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
+      <a class="hlink" href="mailto:you@email.com">Email</a>
     </div>
   </div>
 
@@ -148,53 +148,53 @@ footer a:hover{color:#888}
       <h3>Active projects · C1 → R3</h3>
       <div class="focus-items">
         <div class="focus-item">
-          <span class="fi-id" style="background:#E1F5EE;color:#0F6E56">C1</span>
+          <span class="fi-id" style="background:#1a1a1a;color:#f9f8f5">C1</span>
           <div class="fi-name">Behavioral fingerprint</div>
-          <div class="fi-desc">Longitudinal style tracking from 10K personal games</div>
+          <div class="fi-desc">Longitudinal style tracking — critical foundation</div>
+        </div>
+        <div class="focus-item">
+          <span class="fi-id" style="background:#1a1a1a;color:#f9f8f5">R1</span>
+          <div class="fi-name">Rating-band atlas</div>
+          <div class="fi-desc">Population behavioral map — main paper target</div>
+        </div>
+        <div class="focus-item">
+          <span class="fi-id" style="background:#E1F5EE;color:#0F6E56">C8</span>
+          <div class="fi-name">Temporal behavior</div>
+          <div class="fi-desc">Think-time models without psychological labels</div>
+        </div>
+        <div class="focus-item">
+          <span class="fi-id" style="background:#E1F5EE;color:#0F6E56">C9</span>
+          <div class="fi-name">Performance state</div>
+          <div class="fi-desc">Cross-game residual performance modeling</div>
+        </div>
+        <div class="focus-item">
+          <span class="fi-id" style="background:#EDE9FE;color:#6D28D9">C10</span>
+          <div class="fi-name">N-of-1 study</div>
+          <div class="fi-desc">Pre-game self-annotation — links state to behavior</div>
         </div>
         <div class="focus-item">
           <span class="fi-id" style="background:#E1F5EE;color:#0F6E56">C2</span>
           <div class="fi-name">Mistake coach</div>
-          <div class="fi-desc">Blunder classifier + GM context retrieval</div>
-        </div>
-        <div class="focus-item">
-          <span class="fi-id" style="background:#E1F5EE;color:#0F6E56">C3</span>
-          <div class="fi-name">Repertoire builder</div>
-          <div class="fi-desc">Style-aware opening recommendations</div>
-        </div>
-        <div class="focus-item">
-          <span class="fi-id" style="background:#E1F5EE;color:#0F6E56">C4</span>
-          <div class="fi-name">Opponent profiling</div>
-          <div class="fi-desc">Pre-game brief from public game history</div>
-        </div>
-        <div class="focus-item">
-          <span class="fi-id" style="background:#E1F5EE;color:#0F6E56">C8</span>
-          <div class="fi-name">Clock agent</div>
-          <div class="fi-desc">Time-pressure behavioral dataset</div>
-        </div>
-        <div class="focus-item">
-          <span class="fi-id" style="background:#E6F1FB;color:#185FA5">R1</span>
-          <div class="fi-name">Rating band atlas</div>
-          <div class="fi-desc">What changes behaviorally per 100 Elo</div>
+          <div class="fi-desc">Human-example retrieval — intervention research</div>
         </div>
         <div class="focus-item">
           <span class="fi-id" style="background:#E6F1FB;color:#185FA5">R2</span>
           <div class="fi-name">GM curriculum</div>
-          <div class="fi-desc">Style-matched GM study plan generator</div>
+          <div class="fi-desc">Style-matched study — experimental</div>
         </div>
         <div class="focus-item">
           <span class="fi-id" style="background:#FAEEDA;color:#854F0B">R3</span>
-          <div class="fi-name">Fair-play dataset</div>
-          <div class="fi-desc">Labeled behavioral dataset for detection research</div>
+          <div class="fi-name">Behavioral dataset</div>
+          <div class="fi-desc">C8 output — conditional release</div>
         </div>
       </div>
     </div>
-    <a class="proj-card featured" href="chess_ai_lab_v2_projects.html" id="projects">
+    <a class="proj-card featured" href="chess-lab.html" id="projects">
       <div class="proj-top">
         <span class="proj-title">Chess AI Lab v2 — full project map</span>
         <span class="proj-arrow">→</span>
       </div>
-      <div class="proj-desc">8 projects spanning behavioral fingerprinting, RL-based coaching, personalised repertoire building, opponent profiling, and research-grade atlas construction. Each project has an abstract, research questions, ordered task list, and AI/ML concept tags.</div>
+      <div class="proj-desc">One longitudinal research program — not a list of tools. C1 + R1 are the critical scientific core. C8, C9, C10 build the temporal and performance-state layers. C2 and R2 are the intervention experiments. Full abstracts, research questions, methodology notes, and AI/ML concept tags.</div>
       <div class="proj-tags">
         <span class="ptag green">Behavioral modelling</span>
         <span class="ptag blue">Human-AI alignment</span>
@@ -257,7 +257,7 @@ footer a:hover{color:#888}
 
 <footer>
   <p>Built with HTML · hosted on GitHub Pages</p>
-  <a href="chess_ai_lab_v2_projects.html">Chess AI Lab →</a>
+  <a href="chess-lab.html">Chess AI Lab →</a>
 </footer>
 
 </body>
